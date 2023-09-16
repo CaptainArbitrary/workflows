@@ -57,8 +57,8 @@ jobs:
     - if: env.SLN_PATH != ''
       run: dotnet build ${{ env.SLN_PATH }} --configuration Release --no-restore
 
-    - run: git add ${{ env.ASSEMBLY_PATH }}
-    - run: git commit -m "Build ${{ env.ASSEMBLY_PATH }} for ${{ env.VERSION_STRING }}"
+    - if: env.SLN_PATH != ''
+      run: git add ${{ env.ASSEMBLY_PATH }} && git commit -m "Build ${{ env.ASSEMBLY_PATH }} for ${{ env.VERSION_STRING }}"
       continue-on-error: true
 #endregion
 
