@@ -95,8 +95,8 @@ jobs:
               "order": "ASC",
               "on_property": "mergedAt"
             },
-            "template": "${{CHANGELOG}}",
-            "pr_template": "${{TITLE}} ([PR #${{NUMBER}}](${{URL}}))\n\n${{BODY}}\n\n",
+            "template": "#{{CHANGELOG}}",
+            "pr_template": "#{{TITLE}} ([PR ##{{NUMBER}}](#{{URL}}))\n\n#{{BODY}}\n\n",
             "empty_template": "No changes."
           }
         fromTag: ${{ env.PREVIOUS_TAG }}
