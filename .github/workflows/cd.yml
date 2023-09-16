@@ -75,7 +75,30 @@ jobs:
     - id: update-changelog
       uses: mikepenz/release-changelog-builder-action@v4
       with:
-        configuration: ".github/workflows/changelog.json"
+        configurationJson: |
+          {
+            "categories": [
+              {
+                "title": "### New Features",
+                "labels": [ "feature" ]
+              },
+              {
+                "title": "### Enhancements",
+                "labels": [ "enhancement" ]
+              },
+              {
+                "title": "### Bug Fixes",
+                "labels": [ "bug" ]
+              }
+            ],
+            "sort": {
+              "order": "ASC",
+              "on_property": "mergedAt"
+            },
+            "template": "${{CHANGELOG}}",
+            "pr_template": "${{TITLE}} ([PR #${{NUMBER}}](${{URL}}))\n\n${{BODY}}\n\n",
+            "empty_template": "No changes."
+          }
         fromTag: ${{ env.PREVIOUS_TAG }}
         toTag: ${{ github.ref }}
         outputFile: CHANGELOG.md.new
