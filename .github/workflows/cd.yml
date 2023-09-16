@@ -148,7 +148,14 @@ jobs:
 #endregion
 
 #region Create release
-    - run: gh release create ${{ github.ref_name }} "${{ env.MOD_NAME }}-${{ env.VERSION_STRING }}.zip" --title "${{ env.VERSION_STRING }}" --notes-file CHANGELOG.md.new
+    - run: |
+        if [[ "${{ env.VERSION_STRING }}" == *"-alpha"* || "${{ env.VERSION_STRING }}" == *"-beta"* || "${{ env.VERSION_STRING }}" == *"-rc"* ]]; then
+          echo "PRERELEASE=--prerelease" >> $GITHUB_ENV
+        else
+          echo "PRERELEASE=" >> $GITHUB_ENV
+        fi
+
+    - run: gh release create ${{ github.ref_name }} "${{ env.MOD_NAME }}-${{ env.VERSION_STRING }}.zip" --title "${{ env.VERSION_STRING }}" --notes-file CHANGELOG.md.new ${{ env.PRERELEASE }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #endregion
