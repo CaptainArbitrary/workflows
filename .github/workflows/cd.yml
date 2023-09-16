@@ -59,6 +59,7 @@ jobs:
 
     - run: git add ${{ env.ASSEMBLY_PATH }}
     - run: git commit -m "Build ${{ env.ASSEMBLY_PATH }} for ${{ env.VERSION_STRING }}"
+      continue-on-error: true
 #endregion
 
 #region Increment mod version
