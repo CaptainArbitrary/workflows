@@ -25,8 +25,26 @@ jobs:
     - run: echo "VERSION_STRING=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
     - run: |
-        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^) || PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+        # Get all tags sorted in descending order
+        ALL_TAGS=$(git tag -l --sort=-v:refname)
+        for TAG in $ALL_TAGS; do
+          # Check if the tag matches the strict semantic versioning format
+          if [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            PREVIOUS_TAG=$TAG
+            break
+          fi
+        done
+
+        # If no matching tag is found, use the first commit
+        if [ -z "$PREVIOUS_TAG" ]; then
+          PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+        fi
+
         echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_ENV
+
+    - env:
+        PREVIOUS_TAG: ${{ env.PREVIOUS_TAG }}
+      run: echo $PREVIOUS_TAG
 #endregion
 
 #region Create release branch
